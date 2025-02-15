@@ -1,7 +1,6 @@
 import streamlit as st
 import datetime ,requests , json , pycountry
 from streamlit_lottie import st_lottie
-from pprint import pprint
 from openai import OpenAI
 
 
@@ -77,7 +76,6 @@ def search_by_keyword(country,keyword,from_date,to_date):
 
     response_json = response.json()
 
-    pprint(response_json)
 
     
     if 'data' not in response_json:
