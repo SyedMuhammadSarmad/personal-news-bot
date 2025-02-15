@@ -1,4 +1,5 @@
 import streamlit as st
+import datetime
 from streamlit_lottie import st_lottie
 import json
 
@@ -7,7 +8,7 @@ def load_lottie_file(filepath: str):
     with open(filepath, encoding="utf-8") as f:
         return json.load(f)
 
-lottie_animation = load_lottie_file("E:\personal-news-bot\Frontend\chatbot-robot.json")
+lottie_animation = load_lottie_file("chatbot-robot.json")
 
 # Display and place animation in the sidebar
 with st.sidebar:
@@ -24,13 +25,13 @@ st.write("I'm here to keep you updated with the latest news. Just tell me what y
 # Creating Buttons for Option Selection
 search_option = None
 
-if st.button("Search by Keyword"):
-    st.balloons()
+if st.button("Search specific Keyword"):
+
     search_option = "Search by Keyword"
     st.session_state.search_option = search_option  # Storing the option in session state
 
-elif st.button("Search by Topic"):
-    st.balloons()
+elif st.button("Browse Different Topic Headlines"):
+
     search_option = "Search by Topic"
     st.session_state.search_option = search_option  # Storing the option in session state
 
@@ -46,9 +47,6 @@ if 'search_option' in st.session_state:
         selected_country = st.selectbox("Select Country", ["US", "UK", "Canada", "India"])
         selected_language = st.selectbox("Select Language", ["English", "Spanish", "French", "German"])
         keyword = st.text_input("Enter a keyword to search")
-
-        # Date selection for Keyword Search
-        selected_date = st.date_input("Select a date", min_value="2020-01-01", max_value="2025-12-31")
 
         # Display response after pressing Search button
         if st.button("Search"):
@@ -67,7 +65,8 @@ if 'search_option' in st.session_state:
         selected_language = st.selectbox("Select Language", ["English", "Spanish", "French", "German"])
 
         # Date selection for Topic Search
-        selected_date = st.date_input("Select a date", min_value="2020-01-01", max_value="2025-12-31")
+        selected_date = st.date_input("Select a date", min_value=datetime.date(2020, 1, 1), max_value=datetime.date(2025, 12, 31))
+
 
         # Display response after pressing Search button
         if st.button("Search"):
