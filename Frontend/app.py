@@ -53,7 +53,6 @@ def topic_headlines(country,topic,date):
         {"role": "system", "content": f"You are an AI news summarizer. Your task is to extract key information from the provided JSON news articles and filter them out according to the {country} and summarize them into clear, concise paragraphs with proper headings. Maintain an informative and neutral tone."},
         {"role": "user", "content": result_json},
     ],
-    max_tokens=1500,
     stream=False,
   )
 
