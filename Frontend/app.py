@@ -132,7 +132,7 @@ st.markdown(
 )
 
 # Applying the custom CSS class to the title
-st.markdown('<h1 class="custom-title">AI News Assistant</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="custom-title">AI News Assist</h1>', unsafe_allow_html=True)
 st.write("I'm here to keep you updated with the latest news. Just tell me what you're looking for!")
 
 # User selects an option
