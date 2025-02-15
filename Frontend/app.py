@@ -1,100 +1,87 @@
-import streamlit as st  # Importing the Streamlit library
+import streamlit as st
 from streamlit_lottie import st_lottie
 import json
 
 # Load the Lottie animation from a local file
-def load_lottie_file(filepath:str):
+def load_lottie_file(filepath: str):
     with open(filepath, encoding="utf-8") as f:
         return json.load(f)
 
 lottie_animation = load_lottie_file("E:\personal-news-bot\Frontend\chatbot-robot.json")
 
-# Display and Place animation in the sidebar
+# Display and place animation in the sidebar
 with st.sidebar:
     st_lottie(lottie_animation, height=200, key="news_bot")  # ✅ Animation always visible
 
-# Mock news dataset
-news_data = {
-    "Trending Topics": [
-        "🚀 SpaceX successfully launches Starship test flight!",
-        "🎤 Grammy Awards 2025: Biggest winners and surprises!",
-        "💰 Bitcoin crosses $50,000 mark after market surge.",
-    ],
-    "Business News": [
-        "📉 Stock market sees a major dip amid inflation fears.",
-        "💼 Tesla announces expansion plans in Europe.",
-        "🏦 Federal Reserve hints at possible interest rate cuts.",
-    ],
-    "Tech & Gaming": [
-        "🎮 PlayStation 6 rumored to launch in 2026!",
-        "📱 Apple unveils new AI-powered iPhone.",
-        "💻 OpenAI releases ChatGPT-5 with groundbreaking features.",
-    ],
-    "Sports Updates": [
-        "⚽ Messi scores a hat-trick in a stunning comeback match!",
-        "🏀 NBA Finals: Lakers vs. Celtics showdown confirmed!",
-        "🏏 Cricket World Cup 2025 schedule officially released.",
-    ]
-}
-
-# Sidebar UI
+# Sidebar Layout
 st.sidebar.markdown("### 👋 Welcome!")
 st.sidebar.write("I'm your Personal News Bot. Stay updated with the latest news! 📰✨")
 
-st.sidebar.markdown("### 🔥 Quick Access")
-
-# State for selected category
-selected_category = None
-
-if st.sidebar.button("🔥 Trending Topics"):
-    selected_category = "Trending Topics"
-elif st.sidebar.button("📈 Business News"):
-    selected_category = "Business News"
-elif st.sidebar.button("🎮 Tech & Gaming"):
-    selected_category = "Tech & Gaming"
-elif st.sidebar.button("⚽ Sports Updates"):
-    selected_category = "Sports Updates"
-
-# Display news if a category is selected
-if selected_category:
-    st.write(f"### {selected_category}")
-    for news in news_data[selected_category]:
-        st.write(f"- {news}")
-
- # Back button
-    if st.button("⬅️ Back to Home"):
-        st.experimental_rerun()  # Reset and go back
-
-if st.button("🆕 New Chat"):
-    st.session_state.messages = []  # Clear previous messages
-    st.rerun()  # Refresh the app
-
-
-
-# Set the title of the chat application with an emoji
+# Main Page Layout
 st.title("🗞️ Personal News Bot 🤖")
+st.write("I'm here to keep you updated with the latest news. Just tell me what you're looking for!")
 
-# Initialize session state to store chat messages (only if not already present)
-if "messages" not in st.session_state:
-    st.session_state.messages = []  # Create an empty list to store chat history
+# Creating Buttons for Option Selection
+search_option = None
 
-# Loop through the stored messages and display them in the chat format
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):  # Display message based on user/assistant role
-        st.markdown(message["content"])  # Show message content
+if st.button("Search by Keyword"):
+    st.balloons()
+    search_option = "Search by Keyword"
+    st.session_state.search_option = search_option  # Storing the option in session state
 
-# Chat input field (takes user input and triggers a response when entered)
-if prompt := st.chat_input("Ask me anything about the latest news 📰..."):  # Waits for user input
-    st.session_state.messages.append({"role": "user", "content": prompt})  # Store user input in chat history
+elif st.button("Search by Topic"):
+    st.balloons()
+    search_option = "Search by Topic"
+    st.session_state.search_option = search_option  # Storing the option in session state
 
-    # Display the user message in the chat UI
-    with st.chat_message("user"):
-        st.markdown(prompt)
+# Use the session state to persist the selected option
+if 'search_option' in st.session_state:
+    search_option = st.session_state.search_option
 
-    # Create an assistant response section
-    with st.chat_message("assistant"):
-        message_placeholder = st.empty()  # Placeholder for assistant response (currently empty)
-        full_response = ""  # No backend processing yet (can be updated later)
+    response_text = ""  # Initialize response text outside the search blocks
 
-    # Store assistant response in chat history
-    st.session_state.messages.append({"role": "assistant", "content": full_response})
+    # Conditional form based on selected option
+    if search_option == "Search by Keyword":
+        # Input Fields for Keyword Search
+        selected_country = st.selectbox("Select Country", ["US", "UK", "Canada", "India"])
+        selected_language = st.selectbox("Select Language", ["English", "Spanish", "French", "German"])
+        keyword = st.text_input("Enter a keyword to search")
+
+        # Date selection for Keyword Search
+        selected_date = st.date_input("Select a date", min_value="2020-01-01", max_value="2025-12-31")
+
+        # Display response after pressing Search button
+        if st.button("Search"):
+            if keyword:  # Check if a keyword is entered
+                response_text = f"Here’s what I found for '{keyword}' in {selected_country} and {selected_language}. Hope this helps!"
+                st.text_area("Assistant Response", response_text, height=100)  # Display response in the text area below
+            else:
+                st.warning("Oops! Please enter a keyword to search.")
+
+    elif search_option == "Search by Topic":
+        # Input Fields for Topic Search
+        selected_country = st.selectbox("Select Country", ["US", "UK", "Canada", "India","Pakistan","France","Spain","Germany"])
+        selected_topic = st.selectbox("Select Topic", ["Beauty","Business","CryptoCuurency","Economy","Education","Entertainment","Finance","Gadgets","Lifestyle",
+                                                       "Markets","Movies","Music","Politics","Science","Soccer","Startup","World","Technology", "Sports", "Gaming", "Health"])
+        
+        selected_language = st.selectbox("Select Language", ["English", "Spanish", "French", "German"])
+
+        # Date selection for Topic Search
+        selected_date = st.date_input("Select a date", min_value="2020-01-01", max_value="2025-12-31")
+
+        # Display response after pressing Search button
+        if st.button("Search"):
+            response_text = f"Here’s the latest news about {selected_topic} in {selected_country} and {selected_language}. Stay tuned!"
+            st.text_area("Assistant Response", response_text, height=100)  # Display response in the text area below
+
+   # Clear Chat Button with Smooth Interaction
+    if st.button("🧹 Clear Chat"):
+        st.text_area("Assistant Response", "", height=100)
+        
+    # Back button to reset and go back to the initial state
+    if st.button("⬅️ Back to Home"):
+        st.session_state.search_option = None  # Reset the search option
+        st.rerun()  # Reset and go back
+
+else:
+    st.warning("I'm ready to assist you! Just pick an option to continue")
