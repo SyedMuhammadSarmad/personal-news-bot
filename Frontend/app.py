@@ -114,23 +114,25 @@ def search_by_keyword(country,keyword,from_date,to_date):
 
 
 
-# Load the Lottie animation from a local file
-def load_lottie_file(filepath: str):
-    with open(filepath, encoding="utf-8") as f:
-        return json.load(f)
-
-lottie_animation = load_lottie_file("chatbot-robot.json")
-
-# Display animation in the sidebar
-with st.sidebar:
-    st_lottie(lottie_animation, height=200, key="news_bot")  # ✅ Animation always visible
-
-# Sidebar Layout
-st.sidebar.markdown("### 👋 Welcome!")
-st.sidebar.write("I'm your Personal News Bot. Stay updated with the latest news! 📰✨")
-
 # Main Page Layout
-st.title("🗞️ Personal News Bot 🤖")
+st.markdown(
+    """
+    <style>
+    .custom-title {
+        text-align: center;
+        background: linear-gradient(to right, #4CAF50, #FF5733); /* Replace with your desired gradient colors */
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 70px; /* Adjust the font size as needed */
+        font-family: 'sans-serif'; /* Choose your preferred font family */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Applying the custom CSS class to the title
+st.markdown('<h1 class="custom-title">AI News Assistant</h1>', unsafe_allow_html=True)
 st.write("I'm here to keep you updated with the latest news. Just tell me what you're looking for!")
 
 # User selects an option
@@ -186,6 +188,3 @@ if "search_option" in st.session_state:
     if st.button("⬅️ Back to Home"):
         st.session_state.search_option = None  # Reset selection
         st.rerun()  # Refresh to start over
-
-else:
-    st.warning("Select an option and press 'Continue' to proceed.")
