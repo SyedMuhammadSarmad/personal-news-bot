@@ -1,6 +1,5 @@
 import streamlit as st
 import datetime ,requests , json , pycountry
-from streamlit_lottie import st_lottie
 from openai import OpenAI
 
 
@@ -44,10 +43,11 @@ def topic_headlines(country,topic,date):
   # Convert to JSON
   result_json = json.dumps(filtered_data, indent=4)
 
-  client = OpenAI(api_key = st.secrets["api"]["aimlapi"], base_url="https://api.aimlapi.com/v1") or OpenAI(api_key = st.secrets["api"]["openrouterapi"], base_url="https://openrouter.ai/api/v1")
+  client = OpenAI(api_key = st.secrets["api"]["openrouterapi"], base_url="https://openrouter.ai/api/v1") or OpenAI(api_key = st.secrets["api"]["aimlapi"], base_url="https://api.aimlapi.com/v1")
+  
 
   response = client.chat.completions.create(
-    model="deepseek/deepseek-chat" or "deepseek/deepseek-chat:free",
+    model="deepseek/deepseek-chat:free" or "deepseek/deepseek-chat",
     messages=[
         {"role": "system", "content": f"You are an AI news summarizer. Your task is to extract key information from the provided JSON news articles and filter them out according to the {country} and summarize them into clear, concise paragraphs with proper headings. Maintain an informative and neutral tone."},
         {"role": "user", "content": result_json},
@@ -96,10 +96,10 @@ def search_by_keyword(country,keyword,from_date,to_date):
     # Convert to JSON
     result_json = json.dumps(filtered_data, indent=4)
 
-    client = OpenAI(api_key = st.secrets["api"]["aimlapi"], base_url="https://api.aimlapi.com/v1") or OpenAI(api_key = st.secrets["api"]["openrouterapi"], base_url="https://openrouter.ai/api/v1")
+    client = OpenAI(api_key = st.secrets["api"]["openrouterapi"], base_url="https://openrouter.ai/api/v1") or OpenAI(api_key = st.secrets["api"]["aimlapi"], base_url="https://api.aimlapi.com/v1")
     
     response = client.chat.completions.create(
-    model="deepseek/deepseek-chat" or "deepseek/deepseek-chat:free",
+    model="deepseek/deepseek-chat:free" or "deepseek/deepseek-chat",
     messages=[
         {"role": "system", "content": f"You are an AI news summarizer. Your task is to extract key information from the provided JSON news articles and filter them out according to the {country} and summarize them into clear, concise paragraphs with proper headings. Maintain an informative and neutral tone."},
         {"role": "user", "content": result_json},
